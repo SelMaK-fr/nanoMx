@@ -41,9 +41,9 @@ function vkpStoriesHeader($title)
     title($title);
     OpenTable();
     echo '
-		<ul class="nav">
-			<li>' . $menu . '</li>
-		</ul>
+        <ul class="nav">
+            <li>' . $menu . '</li>
+        </ul>
     <br class="clear" />';
     CloseTable();
 }
@@ -193,8 +193,8 @@ function DisplayStory($qid)
 {
     global $prefix, $user_prefix;
     $result = sql_query("SELECT qid, uid, uname as informant, subject as title, story as hometext, storyext as bodytext, topic, alanguage
-    					FROM ${prefix}_queue
-    					WHERE qid=" . intval($qid));
+                        FROM ${prefix}_queue
+                        WHERE qid=" . intval($qid));
     $story = sql_fetch_assoc($result);
     $story['op'] = PMX_MODULE . '/DisplayStory';
     include('header.php');
@@ -500,8 +500,8 @@ function submissions()
 
     include('header.php');
     $result = sql_query("SELECT qid, subject, timestamp, alanguage
-    					FROM ${prefix}_queue
-    					ORDER BY timestamp");
+                        FROM ${prefix}_queue
+                        ORDER BY timestamp");
     $dummy = 0;
     $out = "";
     while (list($qid, $title, $time, $alanguage) = sql_fetch_row($result)) {
@@ -526,7 +526,7 @@ function submissions()
     OpenTable2();
     if (empty($dummy)) {
         echo '
-			<div class="alert alert-info"><strong>' . _NOSUBMISSIONS . '</strong></div>';
+            <div class="alert alert-info"><strong>' . _NOSUBMISSIONS . '</strong></div>';
     } else {
         echo "<center><b>" . _NEWSUBMISSIONS . "</b></center><br /><br />\n";
         echo "<table class=\"table\">\n";
@@ -558,8 +558,8 @@ function currentStories()
     $img_view = mxCreateImage("images/view.gif", _SHOW, 0, 'title="' . _SHOW . '"');
 
     $result = sql_query("SELECT sid, aid as s_aid, title, time, topic, informant, alanguage, counter
-    		FROM ${prefix}_stories WHERE  time  <= now()
-    		ORDER BY time desc");
+            FROM ${prefix}_stories WHERE  time  <= now()
+            ORDER BY time desc");
     $dummy = 0;
     $out = '';
     $out2 = '';
@@ -637,8 +637,8 @@ function timedStories()
     $img_view = mxCreateImage("images/view.gif", _SHOW, 0, 'title="' . _SHOW . '"');
 
     $result = sql_query("SELECT sid, aid as s_aid, title, time, topic, informant, alanguage
-    					FROM ${prefix}_stories WHERE  time  > now()
-    					ORDER BY time desc");
+                        FROM ${prefix}_stories WHERE  time  > now()
+                        ORDER BY time desc");
     $dummy = 0;
     $out = '';
     $out2 = '';
@@ -801,8 +801,8 @@ function SaveCategory($pvs)
     $pvs = mxAddSlashesForSQL($pvs);
     extract($pvs);
     $result = sql_query("SELECT catid
-    					FROM ${prefix}_stories_cat
-    					WHERE title='" . $title . "'");
+                        FROM ${prefix}_stories_cat
+                        WHERE title='" . $title . "'");
     list($check) = sql_fetch_row($result);
     if ($check) {
         $what1 = _CATEXISTS;
@@ -840,8 +840,8 @@ function SaveEditCategory($pvs)
     extract($pvs);
     $catid = (int)$catid;
     $result = sql_query("SELECT catid
-    					FROM ${prefix}_stories_cat
-    					WHERE title='$title'");
+                        FROM ${prefix}_stories_cat
+                        WHERE title='$title'");
     list($check) = sql_fetch_row($result);
     if ($check) {
         $what1 = _CATEXISTS;
@@ -904,8 +904,8 @@ function YesDelCategory()
     $result1 = sql_query("DELETE FROM ${prefix}_stories_cat where catid=" . intval($_GET['catid']));
     if ($result1) {
         $result2 = sql_query("SELECT sid
-        					FROM ${prefix}_stories
-        					WHERE catid=" . intval($_GET['catid']));
+                            FROM ${prefix}_stories
+                            WHERE catid=" . intval($_GET['catid']));
         while (list($sid) = sql_fetch_row($result2)) {
             $allsid[] = $sid;
         }
@@ -965,8 +965,8 @@ function mxDelStories($arrsid = array())
     global $prefix, $user_prefix;
     $insids = implode(',', $arrsid);
     $result = sql_query("SELECT sid, catid, aid, informant
-    					FROM ${prefix}_stories
-    					WHERE sid IN (" . $insids . ")");
+                        FROM ${prefix}_stories
+                        WHERE sid IN (" . $insids . ")");
     if ($result) {
         $result22 = sql_query("DELETE FROM ${prefix}_stories WHERE sid IN (" . $insids . ")");
         if ($result22) {
@@ -1032,10 +1032,10 @@ function removeComment($tid, $sid, $ok = 0)
         title(_REMOVECOMMENTS);
         OpenTableAl();
         echo '
-        	<p class="align-center">
-       			' . _SURETODELCOMMENTS . '<br /><br />
-       			[&nbsp;<a href="modules.php?name=' . PMX_MODULE . '&amp;file=article&amp;sid=' . $sid . '" onclick="history.go(-1); return false;">' . _NO . '</a> | <a href="' . adminUrl(PMX_MODULE, 'RemoveComment', 'tid=' . $tid . '&amp;sid=' . $sid . '&amp;ok=1') . '">' . _YES . '</a>&nbsp;]
-       		</p>';
+            <p class="align-center">
+                ' . _SURETODELCOMMENTS . '<br /><br />
+                [&nbsp;<a href="modules.php?name=' . PMX_MODULE . '&amp;file=article&amp;sid=' . $sid . '" onclick="history.go(-1); return false;">' . _NO . '</a> | <a href="' . adminUrl(PMX_MODULE, 'RemoveComment', 'tid=' . $tid . '&amp;sid=' . $sid . '&amp;ok=1') . '">' . _YES . '</a>&nbsp;]
+            </p>';
         CloseTableAl();
         include('footer.php');
     }
