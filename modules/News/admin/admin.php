@@ -777,7 +777,7 @@ function CategoriesMenu()
 <input class="form-control" type="text" name="title" value="" size="22" maxlength="40" />
 <input type="hidden" name="op" value="' . PMX_MODULE . '/SaveCategory" />
 </div>
-<input class="btn btn-primary" type="submit" value="' . _SAVE . '" />
+<button class="btn btn-primary" type="submit"><i class="fa fa-plus"></i> ' . _SAVE . '</button>
 </form>
 </td><td colspan="2"><a name="AddCategory">&nbsp;</a>
 </td>
