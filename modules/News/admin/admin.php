@@ -31,17 +31,17 @@ mxGetLangfile($module_name);
 function vkpStoriesHeader($title)
 {
     // TODO: Current-Klasse anfügen !!
-    $item[] = '<a href="' . adminUrl(PMX_MODULE, 'adminStory') . '" title="' . _ADDSTORY . '">' . _ADDSTORY . '</a>';
-    $item[] = '<a href="' . adminUrl(PMX_MODULE) . '" title="' . _ADMIN_NEWSNEW . '">' . _ADMIN_NEWSNEW . '</a>';
-    $item[] = '<a href="' . adminUrl(PMX_MODULE, 'currentStories') . '" title="' . _ADMIN_NEWSCURRENT . '">' . _ADMIN_NEWSCURRENT . '</a>';
-    $item[] = '<a href="' . adminUrl(PMX_MODULE, 'timedStories') . '" title="' . _ADMIN_NEWSTIMED . '">' . _ADMIN_NEWSTIMED . '</a>';
-    $item[] = '<a href="' . adminUrl(PMX_MODULE, 'Categories') . '" title="' . _CATEGORIESADMIN . '">' . _ADMIN_NEWSCATEGORIES . '</a>';
+    $item[] = '<a class="btn btn-primary" href="' . adminUrl(PMX_MODULE, 'adminStory') . '" title="' . _ADDSTORY . '">' . _ADDSTORY . '</a>';
+    $item[] = '<a class="btn btn-primary" href="' . adminUrl(PMX_MODULE) . '" title="' . _ADMIN_NEWSNEW . '">' . _ADMIN_NEWSNEW . '</a>';
+    $item[] = '<a class="btn btn-primary" href="' . adminUrl(PMX_MODULE, 'currentStories') . '" title="' . _ADMIN_NEWSCURRENT . '">' . _ADMIN_NEWSCURRENT . '</a>';
+    $item[] = '<a class="btn btn-primary" href="' . adminUrl(PMX_MODULE, 'timedStories') . '" title="' . _ADMIN_NEWSTIMED . '">' . _ADMIN_NEWSTIMED . '</a>';
+    $item[] = '<a class="btn btn-primary" href="' . adminUrl(PMX_MODULE, 'Categories') . '" title="' . _CATEGORIESADMIN . '">' . _ADMIN_NEWSCATEGORIES . '</a>';
     $menu = implode('</li><li>', $item);
     GraphicAdmin();
     title($title);
     OpenTable();
     echo '
-		<ul class="tabs-nav-secondary">
+		<ul class="nav">
 			<li>' . $menu . '</li>
 		</ul>
     <br class="clear" />';
@@ -55,7 +55,7 @@ function vkpNewsNotAuthorized()
     include('header.php');
     vkpStoriesHeader(_ARTICLEADMIN);
     OpenTable();
-    echo "<center><b>" . _NOTAUTHORIZED1 . "</b><br /><br />" . _NOTAUTHORIZED2 . '<br /><br />' . _GOBACK . "</center>";
+    echo "<div class=\"text-center\"><strong>" . _NOTAUTHORIZED1 . "</strong><br /><br />" . _NOTAUTHORIZED2 . '<br /><br />' . _GOBACK . "</div>";
     CloseTable();
     include('footer.php');
 }
@@ -432,11 +432,11 @@ function myform($story, $preview = 0, $caption = '')
     global $prefix;
 
     $story = mxStoryDefaults($story);
-
+    echo '<div class="card">';
     echo '<form name="snews" action="' . adminUrl(PMX_MODULE) . '" method="post">';
     OpenTable();
     if ($caption) {
-        echo '<center><font class="option"><b>' . $caption . '</b></font></center><br /><br />';
+        echo '<div class="card-header"><strong>' . $caption . '</strong></div>';
     }
     if (isset($story['errmsg'])) {
         openTableAl();
@@ -449,7 +449,7 @@ function myform($story, $preview = 0, $caption = '')
         CloseTable2();
         echo '<br />';
     }
-    echo '<div class="content">';
+    echo '<div class="card-body">';
     vkpNewsSelectTopicCat($story);
     vkpPutInHome($story); //// Achtung!!! ihome: 0 = Ja , 1 = Nein
     addNewsTextFields($story);
@@ -476,7 +476,7 @@ function myform($story, $preview = 0, $caption = '')
         echo '<option value="' . PMX_MODULE . '/ChangeStory">' . _SAVECHANGES . '</option>';
     }
     echo '</select>';
-    echo '<input type="submit" value="' . _OK . '" />';
+    echo '<input class=\"btn btn-primary\" type="submit" value="' . _OK . '" />';
     if ($story['op'] == PMX_MODULE . '/DisplayStory' || $story['op'] == PMX_MODULE . '/PreviewAgain') {
         echo ' &nbsp;&nbsp; [&nbsp;<a href="' . adminUrl(PMX_MODULE, 'DeleteStory', 'qid=' . $story['qid'] . '&amp;ok=0') . '">' . _DELETE . '</a>&nbsp;]';
     } else if ($story['op'] == PMX_MODULE . '/EditStory') {
@@ -486,6 +486,7 @@ function myform($story, $preview = 0, $caption = '')
     CloseTable();
 
     echo '</form>';
+    echo '</div>';
 }
 
 /**
@@ -525,10 +526,10 @@ function submissions()
     OpenTable2();
     if (empty($dummy)) {
         echo '
-			<h3 class="align-center">' . _NOSUBMISSIONS . '</h3>';
+			<div class="alert alert-info"><strong>' . _NOSUBMISSIONS . '</strong></div>';
     } else {
         echo "<center><b>" . _NEWSUBMISSIONS . "</b></center><br /><br />\n";
-        echo "<table class=\"list full\">\n";
+        echo "<table class=\"table\">\n";
         echo '<tr>';
         echo '<th>&nbsp;</th>';
         echo '<th>' . _DATE . '</th>';
@@ -693,7 +694,7 @@ function timedStories()
 <option value=\"" . PMX_MODULE . "/EditStory\" selected=\"selected\">" . _EDIT . "</option>
 <option value=\"" . PMX_MODULE . "/RemoveStory\">" . _DELETE . "</option>
 </select>
-<input type=\"submit\" value=\"" . _GO . "\" />
+<input class=\"btn btn-primary\" type=\"submit\" value=\"" . _GO . "\" />
 </form>";
         }
     }
@@ -751,24 +752,32 @@ function CategoriesMenu()
         $fields[] = '<tr><td>
 <b>' . htmlspecialchars($title) . '</b></td><td>
 <form action="' . adminUrl(PMX_MODULE) . '" method="post">
-<input type="text" name="title" value="' . htmlspecialchars($title) . '" size="22" maxlength="40" />
+<div class="input-group">
 <input type="hidden" name="op" value="' . PMX_MODULE . '/SaveEditCategory" />
 <input type="hidden" name="catid" value="' . $catid . '" />
+<input class="form-control" type="text" name="title" value="' . htmlspecialchars($title) . '" size="22" maxlength="40" />
 <input type="hidden" name="anz" value="' . $anz . '" />
-<input type="submit" value="' . _SAVECHANGES . '" />&nbsp;&nbsp;
-</form></td>
-<td><a href="' . adminUrl(PMX_MODULE, 'DelCategory', 'catid=' . $catid . '&amp;anz=' . $anz . '&amp;tit=' . $tit) . '">' . _DELETE . '</a></td>
-<td align="right">&nbsp;&nbsp;' . $anz . ' ' . _ARTICLES . '</td>
+<span class="input-group-btn">
+<button class="btn btn-primary" type="button">' . _SAVECHANGES . '</button>
+</span>
+</div>
+</form>
+</td>
+<td><a class="btn btn-danger btn-sm" href="' . adminUrl(PMX_MODULE, 'DelCategory', 'catid=' . $catid . '&amp;anz=' . $anz . '&amp;tit=' . $tit) . '"><i class="fa fa-trash fa-lg m-t-2"</i></a></td>
+<td align="right">&nbsp;&nbsp;<div class="badge badge-success">' . $anz . '</div> ' . _ARTICLES . '</td>
 </tr>';
     }
 
-    $fields[] = '<tr><td colspan="3"><br /></td></tr>
+    $fields[] = '
 <tr><td>
-<b>' . _CATEGORYADD . '</b></td><td>
+</td><td>
 <form action="' . adminUrl(PMX_MODULE) . '" method="post">
-<input type="text" name="title" value="" size="22" maxlength="40" />
+<div class="form-group">
+<label for="title">' . _CATEGORYADD . '</label>
+<input class="form-control" type="text" name="title" value="" size="22" maxlength="40" />
 <input type="hidden" name="op" value="' . PMX_MODULE . '/SaveCategory" />
-<input type="submit" value="' . _SAVE . '" />
+</div>
+<input class="btn btn-primary" type="submit" value="' . _SAVE . '" />
 </form>
 </td><td colspan="2"><a name="AddCategory">&nbsp;</a>
 </td>
@@ -777,9 +786,9 @@ function CategoriesMenu()
     include('header.php');
     vkpStoriesHeader(_CATEGORIESADMIN);
     OpenTable();
-    echo '<table>';
+    echo '<div class="card"><div class="card-header"><strong>' . _CATEGORYADD . '</strong></div><div class="card-body"><table class="table">';
     echo implode("\n", $fields);
-    echo '</table>';
+    echo '</table></div></div>';
     CloseTable();
     include("footer.php");
 }
@@ -934,7 +943,7 @@ function NoMoveCategory($request)
         echo "<input type=\"hidden\" name=\"catid\" value=\"$catid\" />";
         echo "<input type=\"hidden\" name=\"op\" value=\"" . PMX_MODULE . "/NoMoveCategory\" />";
         echo "<input type=\"hidden\" name=\"tit\" value=\"$tit\" />";
-        echo "<input type=\"submit\" value=\"" . _OK . "\" />";
+        echo "<input class=\"btn btn-primary\" type=\"submit\" value=\"" . _OK . "\" />";
         echo "</form>";
     } else {
         $newcat = (int)$newcat;
