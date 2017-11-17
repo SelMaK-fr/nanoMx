@@ -151,25 +151,25 @@ function ReadEditor()
     ?>
 <form action="<?php echo adminUrl(PMX_MODULE) ?>" method="post">
 <input type="hidden" name="op" value="<?php echo PMX_MODULE ?>/save" />
-
-<!-- START: TABS BOOTSTRAP 4 -->
-<!-- Nav tabs -->  
-<ul class="nav nav-tabs" role="tablist">
-<?php foreach ($wyscnf['groups'] as $group => $groupdata) { ?>
-  <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#group-<?php echo $group ?>"><?php echo $groupdata['title'] ?></a></li>
-<?php } ?>
-  <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#miscopt"><?php echo _EDITOR_MISCOPT ?></a></li>
-</ul> <!-- END:.nav nav-tabs -->
-<!-- Tab panes -->
-
-<div class="tab-content">
+<div id="group-tabs">
+<ul class="tabs-nav">
 <?php foreach ($wyscnf['groups'] as $group => $groupdata) {
 
         ?>
-<div id="group-<?php echo $group ?>" class="tab-pane">
+  <li><a href="#group-<?php echo $group ?>"><?php echo $groupdata['title'] ?></a></li>
+<?php }
+
+    ?>
+  <li><a href="#miscopt"><?php echo _EDITOR_MISCOPT ?></a></li>
+</ul>
+
+<?php foreach ($wyscnf['groups'] as $group => $groupdata) {
+
+        ?>
+<div id="group-<?php echo $group ?>" class="tabs-panel">
 <h3 class="group-hidecaption"><?php echo $groupdata['title'] ?></h3>
 
-<table class="table">
+<table class="form editortabs">
 
   <?php if ($group == 'user' && count($wyscnf['pmx_groups_list']) > 1) {
 
@@ -252,7 +252,7 @@ function ReadEditor()
 
             ?>
 
-      <table class="table">
+      <table class="form border" id="fhdshdstrh">
         <tr>
           <th><?php echo _FILEMAN_FOLDER_PATH ?></th>
           <th><?php echo _FILEMAN_FOLDER_ALIAS ?></th>
@@ -326,7 +326,7 @@ function ReadEditor()
     </td>
   </tr>
 
-  <tr><td colspan="2"><hr /><input type="submit" class="btn btn-primary" value="<?php echo _EDITOR_SAVE ?>"></td></tr>
+  <tr><td colspan="2"><hr /><input type="submit" value="<?php echo _EDITOR_SAVE ?>"></td></tr>
 
 </table>
 </div>
@@ -334,10 +334,10 @@ function ReadEditor()
 
     ?>
 
-<div id="miscopt" class="tab-pane active">
+<div id="miscopt" class="tabs-panel">
 <h3 class="group-hidecaption"><?php echo _EDITOR_MISCOPT ?></h3>
 
-<table class="table">
+<table class="form editortabs">
   <tr>
     <td><label><?php echo _EDITOR_MAX_IMG_WIDTH ?></label></td>
     <td><input type="text" size="6" maxlength="5" name="globals[max_img_width]" value="<?php echo $wyscnf['globals']['max_img_width'] ?>" style="text-align: right" />&nbsp;<?php echo _EDITOR_INPIXEL ?></td>
@@ -364,15 +364,13 @@ function ReadEditor()
     <td><input type="text" size="10" name="globals[area_background]" value="<?php echo $wyscnf['globals']['area_background'] ?>" /></td>
   </tr>
   <tr>
-    <td colspan="2"><hr /><input type="submit" class="btn btn-primary" value="<?php echo _EDITOR_SAVE ?>"></td>
+    <td colspan="2"><hr /><input type="submit" value="<?php echo _EDITOR_SAVE ?>"></td>
   </tr>
 </table>
 </div>
 
-</div><!-- /group-tabs -->
- <!-- END:.tab-content -->
-<!-- END: TABS NAV -->
 
+</div><!-- /group-tabs -->
 </form>
 
 <script type="text/javascript">
