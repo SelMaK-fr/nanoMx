@@ -553,10 +553,6 @@ function currentStories()
     extract(mxGetAdminData());
     include("header.php");
 
-    $img_delete = mxCreateImage("images/delete.gif", _DELETE, 0, 'title="' . _DELETE . '"');
-    $img_edit = mxCreateImage("images/edit.gif", _EDIT, 0, 'title="' . _EDIT . '"');
-    $img_view = mxCreateImage("images/view.gif", _SHOW, 0, 'title="' . _SHOW . '"');
-
     $result = sql_query("SELECT sid, aid as s_aid, title, time, topic, informant, alanguage, counter
             FROM ${prefix}_stories WHERE  time  <= now()
             ORDER BY time desc");
@@ -573,8 +569,11 @@ function currentStories()
             $out .= "<td nowrap=\"nowrap\">" . formatTimestamp($time, _SHORTDATESTRING) . "</td>\n";
             $out .= "<td>" . $title . "</td>\n";
             $out .= "<td>" . mxGetLanguageString($alanguage) . "</td>\n";
-            $out .= "<td>" . $counter . "</td>\n";
-            $out .= "<td nowrap=\"nowrap\"><a href=\"" . adminUrl(PMX_MODULE, 'EditStory', "sid=" . $sid) . "\">" . $img_edit . "</a> <a href=\"" . adminUrl(PMX_MODULE, 'RemoveStory', 'sid=' . $sid) . "\">" . $img_delete . "</a></td>\n";
+            $out .= "<td><span class=\"badge badge-secondary\"> ".$counter." </span></td>\n";
+            $out .= "<td nowrap=\"nowrap\">
+            <a class=\"btn btn-outline-secondary btn-sm\" href=\"" . adminUrl(PMX_MODULE, 'EditStory', "sid=" . $sid) . "\">
+            <i class=\"fa fa-edit fa-lg m-t-2\"></i></a> 
+            <a class=\"btn btn-outline-secondary btn-sm\" href=\"" . adminUrl(PMX_MODULE, 'RemoveStory', 'sid=' . $sid) . "\"><i class=\"fa fa-trash fa-lg m-t-2\"></i></a></td>\n";
             $out .= "</tr>";
         } else {
             $out2 .= "<option value=\"" . $sid . "\">" . formatTimestamp($time, _SHORTDATESTRING) . " - " . htmlspecialchars(mxCutString($title, 75)) . "</option>\n";
@@ -589,10 +588,10 @@ function currentStories()
     vkpStoriesHeader(_ARTICLEADMIN);
     OpenTable();
     if (empty($dummy)) {
-        echo "<center><font class=\"title\"><b>" . _ADMIN_NEWSNOARTICLES . "</b></font></center>\n";
+        echo '<div class="alert alert-info">'. _ADMIN_NEWSNOARTICLES . '</b></font></center>';
     } else {
-        echo "<center><b>" . _LAST . " " . $countview . " " . _ARTICLES . "</b></center><br /><br />\n";
-        echo "<table class=\"full list\">\n";
+        echo '<div class="card"><div class="card-header"><strong> '. _LAST .'   '. $countview .'   '. _ARTICLES .' </strong></div>';
+        echo '<div class="card-body"><table class="table">';
         echo '<tr>';
         echo '<th>&nbsp;</th>';
         echo '<th>' . _DATE . '</th>';
@@ -602,12 +601,12 @@ function currentStories()
         echo '<th>' . _FUNCTIONS . '</th>';
         echo '</tr>';
         echo $out;
-        echo "</table>\n";
+        echo "</div></table></div>\n";
         if ($out2) {
             CloseTable();
             echo '<br />';
             OpenTable();
-            echo "<center><b>" . _ADMIN_NEWSOLD . "</b> (" . ($dummy - $countview) . ")</center><br />\n";
+            echo '<div class="text-center"><strong>'. _ADMIN_NEWSOLD . '</strong> (' . ($dummy - $countview) . ')</div>';
             echo "
 <form action=\"" . adminUrl(PMX_MODULE) . "\" method=\"get\">
 <select name=\"sid\" size=\"15\">" . $out2 . "</select><br /><br />
@@ -758,7 +757,7 @@ function CategoriesMenu()
 <input class="form-control" type="text" name="title" value="' . htmlspecialchars($title) . '" size="22" maxlength="40" />
 <input type="hidden" name="anz" value="' . $anz . '" />
 <span class="input-group-btn">
-<button class="btn btn-primary" type="button">' . _SAVECHANGES . '</button>
+<button class="btn btn-primary" type="submit">' . _SAVECHANGES . '</button>
 </span>
 </div>
 </form>
