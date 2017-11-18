@@ -146,10 +146,10 @@ function vkpNewsSelectPoll($artid, $pollID)
         $options[$plID] = "<option value=\"$plID\">" . mxEntityQuotes($plTitle . $activ) . "</option>";
     }
 
-    echo "<br /><b>" . _ATTACHAPOLL . "</b><br />
-      <select name=\"pollID\">
+    echo "<div class=\"form-group\"><label for=\"pollID\" class=\"col-form-label\"><strong>" . _ATTACHAPOLL . "</strong></label>
+      <select class=\"form-control  col-md-2\" name=\"pollID\" id=\"pollID\">
       " . implode(PHP_EOL, $options) . "
-      </select><br />";
+      </select></div>";
 
     if ($artid && $pollTitle) {
         echo '- ' . sprintf(_ANNOUNCEEDIT, '<a href="' . adminUrl('Surveys', 'edit', array('pollID' => $pollID)) . '">' . $pollTitle . '</a>') . '<br />';
@@ -447,24 +447,23 @@ function myform($story, $preview = 0, $caption = '')
     global $prefix;
 
     $story = mxStoryDefaults($story);
-    echo '<div class="card">';
+    echo '';
     echo '<form name="snews" action="' . adminUrl(PMX_MODULE) . '" method="post">';
-    OpenTable();
-    if ($caption) {
-        echo '<div class="card-header"><strong>' . $caption . '</strong></div>';
-    }
+    //OpenTable();
+
     if (isset($story['errmsg'])) {
-        openTableAl();
-        echo '<div style="text-align: left;"><h2>' . _ERROROCCURS . '</h2><ul><li>' . implode('</li><li>', $story['errmsg']) . '</li></ul></div>';
-        closeTableAl();
-        echo '<br />';
+        //openTableAl();
+        echo '<div class="alert alert-danger"><h2>' . _ERROROCCURS . '</h2><ul><li>' . implode('</li><li>', $story['errmsg']) . '</li></ul></div>';
+        //closeTableAl();
     } else if ($preview) {
-        OpenTable2();
+        //OpenTable2();
+        echo '<div class="card"><div class="card-body">';
         vkpStoryPreview($story);
-        CloseTable2();
-        echo '<br />';
+        echo '</div></div>';
+        //CloseTable2();
+
     }
-    echo '<div class="card-body">';
+    echo '<div class="card"><div class="card-header"><strong>' . $caption . '</strong></div><div class="card-body">';
     vkpNewsSelectTopicCat($story);
     vkpPutInHome($story); //// Achtung!!! ihome: 0 = Ja , 1 = Nein
     addNewsTextFields($story);
@@ -493,12 +492,12 @@ function myform($story, $preview = 0, $caption = '')
     echo '</select>';
     echo '<button type="submit" class="btn btn-primary">' . _OK . '</button>';
     if ($story['op'] == PMX_MODULE . '/DisplayStory' || $story['op'] == PMX_MODULE . '/PreviewAgain') {
-        echo ' &nbsp;&nbsp; [&nbsp;<a href="' . adminUrl(PMX_MODULE, 'DeleteStory', 'qid=' . $story['qid'] . '&amp;ok=0') . '">' . _DELETE . '</a>&nbsp;]';
+        echo '<a class="btn btn-danger" href="' . adminUrl(PMX_MODULE, 'DeleteStory', 'qid=' . $story['qid'] . '&amp;ok=0') . '"><i class="fa fa-trash"></i> ' . _DELETE . '</a>';
     } else if ($story['op'] == PMX_MODULE . '/EditStory') {
-        echo ' &nbsp;&nbsp; [&nbsp;<a href="' . adminUrl(PMX_MODULE, 'RemoveStory', 'sid=' . $story['sid'] . '&amp;ok=0') . '">' . _DELETE . '</a>&nbsp;]';
+        echo '<a class="btn btn-danger" href="' . adminUrl(PMX_MODULE, 'RemoveStory', 'sid=' . $story['sid'] . '&amp;ok=0') . '"><i class="fa fa-trash"></i> ' . _DELETE . '</a>';
     }
     echo '</div>';
-    CloseTable();
+    //CloseTable();
 
     echo '</form>';
     echo '</div>';
@@ -737,8 +736,8 @@ function vkpUsernameField ($story)
         $userinfo = mxGetUserDataFromUsername($story['informant']);
     }
     $informant_before = (isset($story['informant_before'])) ? $story['informant_before'] : $story['informant'];
-    echo '<br /><b>' . _SUBMITTER . ':</b><br />
-    <input type="text" name="informant" size="28" maxlength="25" value="' . mxEntityQuotes($story['informant']) . '" />
+    echo '<div class="form-inline"><label for="informant"><strong>' . _SUBMITTER . ':</strong</label>
+    <input class="form-control" type="text" name="informant" id="informant" value="' . mxEntityQuotes($story['informant']) . '" />
     <input type="hidden" name="informant_before" value="' . mxEntityQuotes($informant_before) . '" />
     ';
     if (!empty($userinfo['uid'])) {
@@ -746,7 +745,7 @@ function vkpUsernameField ($story)
         echo '&nbsp;&nbsp;<span class="content">
         [&nbsp;<a href="mailto:' . $userinfo['email'] . '">' . _SENDEMAILUSER . '</a>
         | <a href="modules.php?name=Private_Messages&amp;op=send&amp;uname=' . $story['informant'] . '" target="_blank">' . _SENDPMUSER . '</a>&nbsp;]
-        </span>';
+        </span></div>';
     }
 }
 

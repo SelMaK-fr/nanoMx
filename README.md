@@ -6,7 +6,7 @@ UPDATE 17.11.2017
 Refactorisation des catégories
 - Mise à jour des la liste des articles
 
-UPDATE 18.11.2017
+UPDATE 18.11.2017 (admin News)
 
 **Terminé(s)** :
 
@@ -17,5 +17,5 @@ UPDATE 18.11.2017
 
 - modules/News/admin/admin.php
 - includes/mxNewsFunctions.php 
-[addNewsTextFields() / vkpNewsSelectTopicCat()]
+[addNewsTextFields() / vkpNewsSelectTopicCat() / vkpNewsSelectActComments() / vkpAutomatedSelect()]
 -------------------

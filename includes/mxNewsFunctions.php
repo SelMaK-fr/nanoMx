@@ -334,19 +334,19 @@ function addNewsTextFields($story)
 {
     // die Daten muessen ohne Backslashes kommen
     $sw = load_class('Textarea');
-    echo "<div class=\"form-group col-sm-6\">";
+    echo "<div class=\"form-group\">";
     echo "<label for=\"title\">" . _TITLE . "</label>";
     echo "<input type=\"text\" class=\"form-control\" name=\"title\" id=\"title\" size=\"80\" maxlength=\"80\" value=\"" . mxEntityQuotes($story['title']) . "\" /></div>";
-    echo "<div class=\"form-group col-sm-12\">";
+    echo "<div class=\"form-group\">";
     echo '<label for="storytext">' . _STORYTEXT . ':</label>';
     echo $sw->getHtml(array('name' => 'hometext', 'value' => $story['hometext'], 'height' => '350'));
     echo "</div>";
-    echo "<div class=\"form-group col-sm-12\"><label for=\"extendedtext\">" . _EXTENDEDTEXT . ":</label>";
+    echo "<div class=\"form-group\"><label for=\"extendedtext\">" . _EXTENDEDTEXT . ":</label>";
     echo $sw->getHtml(array('name' => 'bodytext', 'value' => $story['bodytext'], 'height' => '400'));
     echo "</div>";
     // Achtung: Notes funktionieren nur, wenn die Funktion über das Adminmodul aufgerufen wird
     if (MX_IS_ADMIN && defined("mxAdminFileLoaded")) {
-        echo "<div class=\"form-group col-sm-12\"><label for=\"note\">" . _NOTES . ':</label>';
+        echo "<div class=\"form-group\"><label for=\"note\">" . _NOTES . ':</label>';
         echo $sw->getHtml(array('name' => 'notes', 'value' => $story['notes'], 'height' => '120'));
         echo "</div>";
     }
@@ -362,13 +362,12 @@ function vkpNewsSelectLanguage($alanguage = '')
 {
     if ($GLOBALS['multilingual']) {
         echo '
-			<br />
-			<b>' . _LANGUAGE . ': </b>
-			<br />
+			<div class="form-group">
+            <label for="alanguage" class="col-form-label"><strong>' . _LANGUAGE . ': </strong></label>
 			' . mxLanguageSelect('alanguage', $alanguage, 'language', 1) . '<br />';
     } else {
         echo '
-			<input type="hidden" name="alanguage" value="" />';
+			<input class="form-control" type="hidden" name="alanguage" value="" />';
     }
 }
 
@@ -481,13 +480,13 @@ function vkpAutomatedSelect($year, $day, $month, $hour, $min)
         $mi[] = "<option value=\"$xmin\" $sel>$ymin</option>";
         $xmin = $xmin + 5;
     }
-    echo "<br /><b>" . $title . "</b>&nbsp;&nbsp;";
-    echo "<br /><span class=\"tiny\">" . _NOWIS . ": " . vkpGetDate() . "</span><br /><br />";
-    echo " " . _DAY . ": <select name=\"day\">" . (implode("\n", $d)) . "</select>";
-    echo " " . _UMONTH . ": <select name=\"month\">" . (implode("\n", $m)) . "</select>";
-    echo " " . _YEAR . ": <input type=\"text\" name=\"year\" value=\"$year\" size=\"5\" maxlength=\"4\" />";
-    echo " " . _HOUR . ": <select name=\"hour\">" . (implode("\n", $h)) . "</select>";
-    echo " : <select name=\"min\">" . (implode("\n", $mi)) . "</select><br />";
+    echo "<strong>" . $title . "</strong>";
+    echo "<p><em>" . _NOWIS . ": " . vkpGetDate() . "</em></p>";
+    echo "<div class=\"form-inline\"><div class=\"form-group\"><label class=\"col-form-label\"> " . _DAY . ":</label> <select class=\"form-control\" name=\"day\">" . (implode("\n", $d)) . "</select></div>";
+    echo "<div class=\"form-group\"><label class=\"col-form-label\">  " . _UMONTH . ":</label> <select class=\"form-control\" name=\"month\">" . (implode("\n", $m)) . "</select></div>";
+    echo "<div class=\"form-group\"><label class=\"col-form-label\">   " . _YEAR . ":</label> <input class=\"form-control\" type=\"text\" name=\"year\" value=\"$year\" size=\"5\" maxlength=\"4\" /></div>";
+    echo "<div class=\"form-group\"><label class=\"col-form-label\">  " . _HOUR . ":</label> <select class=\"form-control\" name=\"hour\">" . (implode("\n", $h)) . "</select>";
+    echo " : <select class=\"form-control\" name=\"min\">" . (implode("\n", $mi)) . "</select></div></div>";
 }
 
 /**
@@ -518,12 +517,21 @@ function vkpNewsSelectActComments($acomm = 0)
     // Achtung!!! acomm: 0 = Ja , 1 = Nein
     $sel1 = (empty($acomm)) ? 'checked="checked"' : '';
     $sel2 = (empty($acomm)) ? '' : 'checked="checked"';
-    echo '
-		<br />
-		<b>' . _ACTIVATECOMMENTS . '</b>&nbsp;&nbsp;
-		<input type="radio" name="acomm" value="0" ' . $sel1 . ' />' . _YES . '
-		&nbsp;
-		<input type="radio" name="acomm" value="1" ' . $sel2 . ' />' . _NO ;
+
+    echo '<p></p><div class="form-group row"><div class="col-sm-2"><strong>' . _ACTIVATECOMMENTS . '</strong></div>';
+
+    echo '<div class="col-sm-10"><label class="custom-control custom-radio">
+          <input class="custom-control-input" type="radio" name="acomm" value="0" '.$sel1.'/>
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description">'. _YES .'</span>
+          </label>
+          <label class="custom-control custom-radio">
+          <input class="custom-control-input" type="radio" name="acomm" value="1" '.$sel2.'/>
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description">'. _NO . '</span>
+          </label></div>';
+
+    echo '</div>';  
 }
 
 /**
