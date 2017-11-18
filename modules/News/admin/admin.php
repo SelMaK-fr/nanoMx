@@ -67,10 +67,25 @@ function vkpPutInHome($story)
     // // Achtung!!! ihome: 0 = Ja , 1 = Nein
     $sel1 = (empty($story['ihome'])) ? ' checked="checked"' : "";
     $sel2 = (empty($story['ihome'])) ? "" : ' checked="checked"';
-    echo "<b>" . _PUBLISHINHOME . "</b>&nbsp;&nbsp;";
-    echo "<input type=\"radio\" name=\"ihome\" value=\"0\" $sel1 />" . _YES . "&nbsp;"
-     . "<input type=\"radio\" name=\"ihome\" value=\"1\" $sel2 />" . _NO . '<br />'
-     . "&nbsp;&nbsp;&nbsp;<span class=\"note tiny\">(" . _ONLYIFCATSELECTED . ")</span><br /><br />";
+
+    echo '<div class="form-group row"><div class="col-sm-2"><strong>'. _PUBLISHINHOME .'</strong></div>';
+
+    echo '<div class="col-sm-10"><label class="custom-control custom-radio">
+          <input class="custom-control-input" type="radio" name="ihome" value="0" '.$sel1.'/>
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description">'. _YES .'</span>
+          </label>
+          <label class="custom-control custom-radio">
+          <input class="custom-control-input" type="radio" name="ihome" value="1" '.$sel2.'/>
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description">'. _NO . '</span>
+          </label></div>';
+
+    echo '<i class="col-sm-10">'. _ONLYIFCATSELECTED .'</i>';
+
+    echo '</div>';      
+
+
 }
 
 /**
@@ -173,8 +188,8 @@ function SelectCategory($cat)
     global $prefix;
     $selcat = sql_query("select catid, title from ${prefix}_stories_cat order by title");
     $a = 1;
-    echo "<b>" . _CATEGORY . ":</b><br /> ";
-    echo "<select name=\"catid\">";
+    echo "<label for=\"category\">" . _CATEGORY . ":</label> ";
+    echo "<select class=\"form-control\" id=\"category\" name=\"catid\">";
     $sel = (empty($cat)) ? 'selected="selected" class="current"' : '';
     echo "<option value=\"0\" $sel> (" . _ARTICLES . ")</option>";
     while (list($catid, $title) = sql_fetch_row($selcat)) {
@@ -462,7 +477,7 @@ function myform($story, $preview = 0, $caption = '')
     echo '<input type="hidden" name="qid" value="' . $story['qid'] . '" />';
     echo '<input type="hidden" name="aid" value="' . $story['aid'] . '" />';
     echo '<br /><br /><br />';
-    echo '<select name="op">';
+    echo '<select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="op">';
     if ($story['op'] == PMX_MODULE . '/DisplayStory' || $story['op'] == PMX_MODULE . '/PreviewAgain') {
         echo '<option value="' . PMX_MODULE . '/PreviewAgain">' . _PREVIEWSTORY . '</option>';
     }
@@ -476,7 +491,7 @@ function myform($story, $preview = 0, $caption = '')
         echo '<option value="' . PMX_MODULE . '/ChangeStory">' . _SAVECHANGES . '</option>';
     }
     echo '</select>';
-    echo '<input class=\"btn btn-primary\" type="submit" value="' . _OK . '" />';
+    echo '<button type="submit" class="btn btn-primary">' . _OK . '</button>';
     if ($story['op'] == PMX_MODULE . '/DisplayStory' || $story['op'] == PMX_MODULE . '/PreviewAgain') {
         echo ' &nbsp;&nbsp; [&nbsp;<a href="' . adminUrl(PMX_MODULE, 'DeleteStory', 'qid=' . $story['qid'] . '&amp;ok=0') . '">' . _DELETE . '</a>&nbsp;]';
     } else if ($story['op'] == PMX_MODULE . '/EditStory') {

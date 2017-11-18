@@ -308,7 +308,7 @@ function vkpStoryPreview($story)
     } else {
         /* fuer veraltete Themes (nuke etc.) */
         echo vkpTopicImage($story['topic'], 1);
-        echo "<b>" . mxPrepareToDisplay($story['title']) . "</b><br /><br />";
+        echo "<strong>" . mxPrepareToDisplay($story['title']) . "</strong><br /><br />";
         echo mxPrepareToDisplay($story['hometext']);
         if (isset($story['bodytext']) && trim(strip_tags($story['bodytext']))) {
             echo '<hr noshade="noshade" size="1" />' . mxPrepareToDisplay($story['bodytext']);
@@ -334,21 +334,21 @@ function addNewsTextFields($story)
 {
     // die Daten muessen ohne Backslashes kommen
     $sw = load_class('Textarea');
-    echo "<div>";
-    echo "<span class=\"content\"><b>" . _TITLE . "</b></span><br />";
-    echo "<input type=\"text\" name=\"title\" size=\"80\" maxlength=\"80\" value=\"" . mxEntityQuotes($story['title']) . "\" />";
-    echo "<br /><br /></div>";
-    echo '<div><b>' . _STORYTEXT . ':</b><br />';
+    echo "<div class=\"form-group col-sm-6\">";
+    echo "<label for=\"title\">" . _TITLE . "</label>";
+    echo "<input type=\"text\" class=\"form-control\" name=\"title\" id=\"title\" size=\"80\" maxlength=\"80\" value=\"" . mxEntityQuotes($story['title']) . "\" /></div>";
+    echo "<div class=\"form-group col-sm-12\">";
+    echo '<label for="storytext">' . _STORYTEXT . ':</label>';
     echo $sw->getHtml(array('name' => 'hometext', 'value' => $story['hometext'], 'height' => '350'));
-    echo "<br /></div>";
-    echo "<div><b>" . _EXTENDEDTEXT . ':</b><br />';
+    echo "</div>";
+    echo "<div class=\"form-group col-sm-12\"><label for=\"extendedtext\">" . _EXTENDEDTEXT . ":</label>";
     echo $sw->getHtml(array('name' => 'bodytext', 'value' => $story['bodytext'], 'height' => '400'));
-    echo "<br /></div>";
+    echo "</div>";
     // Achtung: Notes funktionieren nur, wenn die Funktion über das Adminmodul aufgerufen wird
     if (MX_IS_ADMIN && defined("mxAdminFileLoaded")) {
-        echo "<div><b>" . _NOTES . ':</b><br />';
+        echo "<div class=\"form-group col-sm-12\"><label for=\"note\">" . _NOTES . ':</label>';
         echo $sw->getHtml(array('name' => 'notes', 'value' => $story['notes'], 'height' => '120'));
-        echo "<br /></div>";
+        echo "</div>";
     }
 }
 
@@ -382,9 +382,8 @@ function vkpSelectTopic($topic = 0)
 {
     global $prefix;
     echo '
-		<b>' . _TOPIC . ':</b>
-		<br />
-		<select name="topic">';
+		<label for="topic">' . _TOPIC . ':</label>
+		<select class="form-control" id="topic" name="topic">';
     $toplist = sql_query("SELECT topicid, topictext 
 						FROM " . $prefix . "_topics 
 						ORDER BY topictext");
@@ -499,20 +498,13 @@ function vkpAutomatedSelect($year, $day, $month, $hour, $min)
  */
 function vkpNewsSelectTopicCat($story)
 {
-    echo '
-		<table cellpadding="0" cellspacing="0" width="100%">
-			<tr valign="top">
-				<td width="30%">';
-					vkpSelectTopic($story['topic']);
-	echo '
-				</td>
-				<td>&nbsp;&nbsp;</td>
-				<td width="70%">';
-					SelectCategory($story['catid']);
-    echo '
-				</td>
-			</tr>
-		</table>';
+    echo '<div class="form-row">';
+    echo '<div class="form-group col-md-6">';
+	vkpSelectTopic($story['topic']);
+	echo '</div><div class="form-group col-md-6">';
+	SelectCategory($story['catid']);
+    echo '</div>';
+    echo '</div>';
 }
 
 /**
