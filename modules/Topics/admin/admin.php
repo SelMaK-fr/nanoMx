@@ -33,9 +33,9 @@ function topicsmanager($xtopictext = '', $xtopicimage = '', $t_err = 0)
     include("header.php");
     title(_TOPICSMANAGER);
 
-    OpenTable();
-    echo '<fieldset><legend>' . _CURRENTTOPICS . '</legend>';
-    echo '<p class="align-center">' . _CLICK2EDIT . '</p>'
+
+    echo '<div class="card"><div class="card-header">' . _CURRENTTOPICS . '</div>';
+    echo '<div class="card-body"><p class="alert alert-info">' . _CLICK2EDIT . '</p>'
      . '<table width="100%" cellpadding="5" cellspacing="0"><tr>';
     $count = 0;
     $result = sql_query("SELECT topicid, topicimage, topictext FROM {$prefix}_topics ORDER BY topictext");
@@ -49,22 +49,22 @@ function topicsmanager($xtopictext = '', $xtopicimage = '', $t_err = 0)
             $count = 0;
         }
     }
-    echo '</tr></table></fieldset>';
-    CloseTable();
+    echo '</table></div></div>';
+
 
     echo '<br /><a name="Add"></a>';
 
-    OpenTable();
-    echo '<fieldset><legend>' . _ADDATOPIC . '</legend>';
+    echo '<div class="card"><div class="card-header">' . _ADDATOPIC . '</div>';
     if ($t_err == 1) {
         echo '<center class="warning">' . _TOPICALLFIELDS1 . '</center><br />';
     }
-    echo '<form action="' . adminUrl(PMX_MODULE) . '" method="post" name ="newTopic">'
+    echo '<div class="card-body">
+          <form action="' . adminUrl(PMX_MODULE) . '" method="post" name ="newTopic">'
      . sec_subform($topictext, $topicimage)
      . '<input type="hidden" name="op" value="' . PMX_MODULE . '/make" />'
-     . '<input type="submit" value="' . _ADDTOPIC . '" />'
-     . '</form></fieldset>';
-    CloseTable();
+     . '<div class="form-group"><br/><button class="btn btn-primary" type="submit"><i class="fa fa-plus"></i>  ' . _ADDTOPIC . '</button></div>'
+     . '</form></div></div>';
+
     include("footer.php");
 }
 
@@ -84,18 +84,17 @@ function topicedit($topicid, $topictext = '', $topicimage = '', $name = '', $url
     include("header.php");
     title(_TOPICSMANAGER);
 
-    OpenTable();
-    echo '<fieldset><legend>' . _EDITTOPIC . ': ' . $topictext . '</legend>';
+    echo '<div class="card"><div class="card-header">' . _EDITTOPIC . ': ' . $topictext . '</div>';
     if ($t_err == 1) {
-        echo '<center class="warning">' . _TOPICALLFIELDS1 . '</center><br />';
+        echo '<div class="alert alert-warning>' . _TOPICALLFIELDS1 . '</div>';
     } elseif ($t_err == 2) {
-        echo '<center class="warning">' . _TOPICALLFIELDS2 . '</center><br />';
+        echo '<div class="alert alert-warning>' . _TOPICALLFIELDS2 . '</div>';
     }
-    echo '<form action="' . adminUrl(PMX_MODULE) . '" method="post" name ="newTopic">'
+    echo '<div class="card-body"><form action="' . adminUrl(PMX_MODULE) . '" method="post" name ="newTopic">'
      . sec_subform($topictext, $topicimage)
-     . '<b>' . _ADDRELATED . ':</b><br />'
-     . _SITENAME . ': <input type="text" name="name" value="' . $name . '" size="30" maxlength="30" /><br />'
-     . _URL . ': <input type="text" name="url" value="' . $url . '" size="50" maxlength="200" /><br /><br />'
+     . '<strong>' . _ADDRELATED . ':</strong><br />'
+     . '<div class="form-group row"><label for="staticEmail" class="col-sm-2 col-form-label">' . _SITENAME . '</label><div class="col-sm-10"><input type="text" class="form-control" name="name" value="' . $name . '" maxlength="30" /></div></div>'
+     . '<div class="form-group row"><label for="staticEmail" class="col-sm-2 col-form-label">' . _URL . '</label><div class="col-sm-10"><input type="text" class="form-control" name="url" value="' . $url . '" maxlength="200" /></div></div>'
      . '<b>' . _ACTIVERELATEDLINKS . ':</b><br />'
      . '<table width="100%" border="0">';
     $res = sql_query("SELECT rid, name, url FROM {$prefix}_related WHERE tid=$topicid");
@@ -111,10 +110,9 @@ function topicedit($topicid, $topictext = '', $topicimage = '', $name = '', $url
     echo '</table><br /><br />'
      . '<input type="hidden" name="topicid" value="' . $topicid . '" />'
      . '<input type="hidden" name="op" value="' . PMX_MODULE . '/change" />'
-     . '<input type="submit" value="' . _SAVECHANGES . '" />'
-     . '<font class="content">[&nbsp;<a href="' . adminUrl(PMX_MODULE, 'delete', 'topicid=' . $topicid) . '">' . _DELETE . '</a>&nbsp;]</font>'
-     . '</form></fieldset>';
-    CloseTable();
+     . '<button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> ' . _SAVECHANGES . '</button>'
+     . '<a class="btn btn-danger" href="' . adminUrl(PMX_MODULE, 'delete', 'topicid=' . $topicid) . '"><i class="fa fa-trash"></i> ' . _DELETE . '</a>'
+     . '</form></div></div>';
     include("footer.php");
 }
 
@@ -341,16 +339,20 @@ function sec_subform($topictext, $topicimage)
 
     ?>
 
-<label><?php echo _TOPICNAME ?> &nbsp;
-<span class="tiny"> <?php echo _TOPICTEXT1 ?> </span></label><br />
-<input type="text" name="topictext" size="40" maxlength="40" value="<?php echo mxEntityQuotes($topictext) ?>" required="required" /><br /><br />
-<label><?php echo _TOPICIMAGE ?></label><br />
-<input type="text" name="topicimage" id="topicimagefield" value="<?php echo $topicimage ?>" size="25" maxlength="100" required="required" /> &nbsp;
+<div class="form-group">
+<label for="topictext"><?php echo _TOPICTEXT1 ?></label>
+<input class="form-control" type="text" name="topictext" id="topictext" size="40" maxlength="40" value="<?php echo mxEntityQuotes($topictext) ?>" required="required" />
+</div>
+
+<div class="form-row align-items-center">
+    <div class="col-auto">
+<input class="form-control mb-2 mb-sm-0" type="text" name="topicimage" id="topicimagefield" value="<?php echo $topicimage ?>" size="25" maxlength="100" required="required" placeholder="<?php echo _TOPICIMAGE ?>" /> 
+</div>
 <?php if($fb->is_active()){ ?>
-  <button id="rtvkhs"><?php echo _BROWSE ?></button> &nbsp;
+  <button id="rtvkhs" class="btn btn-primary"><?php echo _BROWSE ?></button> &nbsp;
 <?php } //endif ?>
 <img align="top" alt="topicimage" id="topicimagepic" src="<?php echo $view_image ?>" style="max-height:100px;max-width:100px;" />
-<br /><br />
+</div>
 
 <script type="text/javascript">
   /*<![CDATA[*/
