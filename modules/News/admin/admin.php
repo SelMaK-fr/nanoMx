@@ -1042,10 +1042,11 @@ function removeComment($tid, $sid, $ok = 0)
         title(_REMOVECOMMENTS);
         OpenTableAl();
         echo '
-            <p class="align-center">
-                ' . _SURETODELCOMMENTS . '<br /><br />
-                [&nbsp;<a href="modules.php?name=' . PMX_MODULE . '&amp;file=article&amp;sid=' . $sid . '" onclick="history.go(-1); return false;">' . _NO . '</a> | <a href="' . adminUrl(PMX_MODULE, 'RemoveComment', 'tid=' . $tid . '&amp;sid=' . $sid . '&amp;ok=1') . '">' . _YES . '</a>&nbsp;]
-            </p>';
+            <div class="alert alert-danger">
+                <p><strong>' . _SURETODELCOMMENTS . '</strong></p>
+                <a class="btn btn-danger" href="modules.php?name=' . PMX_MODULE . '&amp;file=article&amp;sid=' . $sid . '" onclick="history.go(-1); return false;">' . _NO . '</a>
+                <a class="btn btn-success" href="' . adminUrl(PMX_MODULE, 'RemoveComment', 'tid=' . $tid . '&amp;sid=' . $sid . '&amp;ok=1') . '">' . _YES . '</a>
+            </div>';
         CloseTableAl();
         include('footer.php');
     }
