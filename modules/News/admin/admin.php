@@ -449,18 +449,15 @@ function myform($story, $preview = 0, $caption = '')
     $story = mxStoryDefaults($story);
     echo '';
     echo '<form name="snews" action="' . adminUrl(PMX_MODULE) . '" method="post">';
-    //OpenTable();
 
     if (isset($story['errmsg'])) {
-        //openTableAl();
         echo '<div class="alert alert-danger"><h2>' . _ERROROCCURS . '</h2><ul><li>' . implode('</li><li>', $story['errmsg']) . '</li></ul></div>';
-        //closeTableAl();
     } else if ($preview) {
-        //OpenTable2();
+        OpenTable2();
         echo '<div class="card"><div class="card-body">';
         vkpStoryPreview($story);
         echo '</div></div>';
-        //CloseTable2();
+        CloseTable2();
 
     }
     echo '<div class="card"><div class="card-header"><strong>' . $caption . '</strong></div><div class="card-body">';
