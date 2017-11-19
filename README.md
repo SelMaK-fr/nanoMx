@@ -19,11 +19,12 @@ UPDATE 18.11.2017 (admin News)
 - includes/mxNewsFunctions.php 
 [addNewsTextFields() / vkpNewsSelectTopicCat() / vkpNewsSelectActComments() / vkpAutomatedSelect()]
 
-UPDATE 19.11.2017 (admin News and Comments)   
+UPDATE 19.11.2017 (admin News, Comments and Topics)   
 
 **Fichiers modifiés** :
 
 - modules/News/admin/admin.php
 [removeComment()]
 - admin/modules/comments/index.php 
+- modules/Topics/admin/admin.php
 -------------------
