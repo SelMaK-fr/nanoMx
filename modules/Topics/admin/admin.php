@@ -96,16 +96,16 @@ function topicedit($topicid, $topictext = '', $topicimage = '', $name = '', $url
      . '<div class="form-group row"><label for="staticEmail" class="col-sm-2 col-form-label">' . _SITENAME . '</label><div class="col-sm-10"><input type="text" class="form-control" name="name" value="' . $name . '" maxlength="30" /></div></div>'
      . '<div class="form-group row"><label for="staticEmail" class="col-sm-2 col-form-label">' . _URL . '</label><div class="col-sm-10"><input type="text" class="form-control" name="url" value="' . $url . '" maxlength="200" /></div></div>'
      . '<b>' . _ACTIVERELATEDLINKS . ':</b><br />'
-     . '<table width="100%" border="0">';
+     . '<table class="table">';
     $res = sql_query("SELECT rid, name, url FROM {$prefix}_related WHERE tid=$topicid");
     $num = sql_num_rows($res);
     if ($num == 0) {
-        echo '<tr><td><font class="tiny">' . _NORELATED . '</font></td></tr>';
+        echo '<tr><td><i>' . _NORELATED . '</i></td></tr>';
     } while (list($rid, $name, $url) = sql_fetch_row($res)) {
-        echo '<tr><td align="left"><font class="content"><strong><big>&middot;</big></strong>&nbsp;&nbsp;<a href="' . $url . '">' . $name . '</a></font></td>'
-         . '<td align="center"><font class="content">'
-         . '<a href="' . $url . '">' . $url . '</a></font></td>'
-         . '<td align="right">&nbsp;<a href="' . adminUrl(PMX_MODULE, 'relatededit', 'tid=' . $topicid . '&amp;rid=' . $rid) . '">' . $img_edit . '</a>&nbsp;<a href="' . adminUrl(PMX_MODULE, 'relateddelete', 'tid=' . $topicid . '&amp;rid=' . $rid) . '">' . $img_delete . '</a></td></tr>';
+        echo '<tr><td align="left"><i class="fa fa-caret-right"></i> <a href="' . $url . '">' . $name . '</a></td>'
+         . '<td class="text-center">'
+         . '<a href="' . $url . '">' . $url . '</a></td>'
+         . '<td class="text-right"><a class="btn btn-outline-secondary btn-sm" href="' . adminUrl(PMX_MODULE, 'relatededit', 'tid=' . $topicid . '&amp;rid=' . $rid) . '"><i class="fa fa-edit"></i></a>&nbsp;<a class="btn btn-outline-secondary btn-sm" href="' . adminUrl(PMX_MODULE, 'relateddelete', 'tid=' . $topicid . '&amp;rid=' . $rid) . '"><i class="fa fa-trash"></i></a></td></tr>';
     }
     echo '</table><br /><br />'
      . '<input type="hidden" name="topicid" value="' . $topicid . '" />'
