@@ -71,8 +71,6 @@ function topicsmanager($xtopictext = '', $xtopicimage = '', $t_err = 0)
 function topicedit($topicid, $topictext = '', $topicimage = '', $name = '', $url = '', $t_err = 0)
 {
     global $prefix, $tipath;
-    $img_delete = mxCreateImage("images/delete.gif", _DELETE, 0, 'title="' . _DELETE . '"');
-    $img_edit = mxCreateImage("images/edit.gif", _EDIT, 0, 'title="' . _EDIT . '"');
     $name = (empty($name)) ? "" : mxEntityQuotes($name);
     $url = (empty($url)) ? "http://" : mxEntityQuotes($url);
 
@@ -93,8 +91,8 @@ function topicedit($topicid, $topictext = '', $topicimage = '', $name = '', $url
     echo '<div class="card-body"><form action="' . adminUrl(PMX_MODULE) . '" method="post" name ="newTopic">'
      . sec_subform($topictext, $topicimage)
      . '<strong>' . _ADDRELATED . ':</strong><br />'
-     . '<div class="form-group row"><label for="staticEmail" class="col-sm-2 col-form-label">' . _SITENAME . '</label><div class="col-sm-10"><input type="text" class="form-control" name="name" value="' . $name . '" maxlength="30" /></div></div>'
-     . '<div class="form-group row"><label for="staticEmail" class="col-sm-2 col-form-label">' . _URL . '</label><div class="col-sm-10"><input type="text" class="form-control" name="url" value="' . $url . '" maxlength="200" /></div></div>'
+     . '<div class="form-group row"><label for="name" class="col-sm-2 col-form-label">' . _SITENAME . '</label><div class="col-sm-10"><input type="text" class="form-control" name="name" value="' . $name . '" maxlength="30" /></div></div>'
+     . '<div class="form-group row"><label for="url" class="col-sm-2 col-form-label">' . _URL . '</label><div class="col-sm-10"><input type="text" class="form-control" name="url" value="' . $url . '" maxlength="200" /></div></div>'
      . '<b>' . _ACTIVERELATEDLINKS . ':</b><br />'
      . '<table class="table">';
     $res = sql_query("SELECT rid, name, url FROM {$prefix}_related WHERE tid=$topicid");
@@ -129,21 +127,19 @@ function relatededit($tid, $rid, $name = '', $url = '', $t_err = 0)
     $result2 = sql_query("SELECT topictext, topicimage FROM {$prefix}_topics WHERE topicid=$tid");
     list($topictext, $topicimage) = sql_fetch_row($result2);
     OpenTable();
-    echo '<center>'
-     . mxCreateImage($tipath . '/' . $topicimage, $topictext, 0, 'align="right"')
-     . '<font class="option"><b>' . _EDITRELATED . '</b></font><br /><br />';
+    echo '<div class="card"><div class="card-header">' . _EDITRELATED . ' : <strong>' . _TOPIC . ':</strong> ' . $topictext . '</div><div class="card-body">';
     if ($t_err == 2) {
-        echo '<center class="warning">' . _TOPICALLFIELDS3 . '</center><br /><br />';
+        echo '<div class="alert alert-warning>' . _TOPICALLFIELDS3 . '</div>';
     }
-    echo '<b>' . _TOPIC . ':</b> ' . $topictext . '</center><br /><br />'
+    echo '<div class="text-center">' . mxCreateImage($tipath . '/' . $topicimage, $topictext, 0, 'align="right"') . '</div>'
      . '<form action="' . adminUrl(PMX_MODULE) . '" method="post">'
-     . _SITENAME . ': <input type="text" name="name" value="' . mxEntityQuotes($name) . '" size="30" maxlength="30" /><br /><br />'
-     . _URL . ': <input type="text" name="url" value="' . mxEntityQuotes($url) . '" size="60" maxlength="200" /><br /><br />'
+     . '<div class="form-group row"><label for="name" class="col-sm-2 col-form-label">' . _SITENAME . '</label><div class="col-sm-10"><input class="form-control" type="text" name="name" value="' . mxEntityQuotes($name) . '" size="30" maxlength="30" /></div></div>'
+     . '<div class="form-group row"><label for="url" class="col-sm-2 col-form-label">' . _URL . '</label><div class="col-sm-10"><input class="form-control" type="text" name="url" value="' . mxEntityQuotes($url) . '" size="60" maxlength="200" /></div></div>'
      . '<input type="hidden" name="op" value="' . PMX_MODULE . '/relatedsave" />'
      . '<input type="hidden" name="tid" value="' . $tid . '" />'
      . '<input type="hidden" name="rid" value="' . $rid . '" />'
-     . '<input type="submit" value="' . _SAVECHANGES . '" /> ' . _GOBACK
-     . '</form>';
+     . '<button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> ' . _SAVECHANGES . '</button>  ' . _GOBACK
+     . '</form></div></div>';
     CloseTable();
     include("footer.php");
 }
