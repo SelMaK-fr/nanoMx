@@ -31,19 +31,19 @@ mxGetLangfile($module_name);
 function vkpStoriesHeader($title)
 {
     // TODO: Current-Klasse anfügen !!
-    $item[] = '<a class="btn btn-primary" href="' . adminUrl(PMX_MODULE, 'adminStory') . '" title="' . _ADDSTORY . '">' . _ADDSTORY . '</a>';
-    $item[] = '<a class="btn btn-primary" href="' . adminUrl(PMX_MODULE) . '" title="' . _ADMIN_NEWSNEW . '">' . _ADMIN_NEWSNEW . '</a>';
-    $item[] = '<a class="btn btn-primary" href="' . adminUrl(PMX_MODULE, 'currentStories') . '" title="' . _ADMIN_NEWSCURRENT . '">' . _ADMIN_NEWSCURRENT . '</a>';
-    $item[] = '<a class="btn btn-primary" href="' . adminUrl(PMX_MODULE, 'timedStories') . '" title="' . _ADMIN_NEWSTIMED . '">' . _ADMIN_NEWSTIMED . '</a>';
-    $item[] = '<a class="btn btn-primary" href="' . adminUrl(PMX_MODULE, 'Categories') . '" title="' . _CATEGORIESADMIN . '">' . _ADMIN_NEWSCATEGORIES . '</a>';
+    $item[] = '<a href="' . adminUrl(PMX_MODULE, 'adminStory') . '" title="' . _ADDSTORY . '">' . _ADDSTORY . '</a>';
+    $item[] = '<a href="' . adminUrl(PMX_MODULE) . '" title="' . _ADMIN_NEWSNEW . '">' . _ADMIN_NEWSNEW . '</a>';
+    $item[] = '<a href="' . adminUrl(PMX_MODULE, 'currentStories') . '" title="' . _ADMIN_NEWSCURRENT . '">' . _ADMIN_NEWSCURRENT . '</a>';
+    $item[] = '<a href="' . adminUrl(PMX_MODULE, 'timedStories') . '" title="' . _ADMIN_NEWSTIMED . '">' . _ADMIN_NEWSTIMED . '</a>';
+    $item[] = '<a href="' . adminUrl(PMX_MODULE, 'Categories') . '" title="' . _CATEGORIESADMIN . '">' . _ADMIN_NEWSCATEGORIES . '</a>';
     $menu = implode('</li><li>', $item);
     GraphicAdmin();
     title($title);
     OpenTable();
     echo '
-        <ul class="nav">
-            <li>' . $menu . '</li>
-        </ul>
+		<ul class="tabs-nav-secondary">
+			<li>' . $menu . '</li>
+		</ul>
     <br class="clear" />';
     CloseTable();
 }
@@ -55,7 +55,7 @@ function vkpNewsNotAuthorized()
     include('header.php');
     vkpStoriesHeader(_ARTICLEADMIN);
     OpenTable();
-    echo "<div class=\"text-center\"><strong>" . _NOTAUTHORIZED1 . "</strong><br /><br />" . _NOTAUTHORIZED2 . '<br /><br />' . _GOBACK . "</div>";
+    echo "<center><b>" . _NOTAUTHORIZED1 . "</b><br /><br />" . _NOTAUTHORIZED2 . '<br /><br />' . _GOBACK . "</center>";
     CloseTable();
     include('footer.php');
 }
@@ -67,25 +67,10 @@ function vkpPutInHome($story)
     // // Achtung!!! ihome: 0 = Ja , 1 = Nein
     $sel1 = (empty($story['ihome'])) ? ' checked="checked"' : "";
     $sel2 = (empty($story['ihome'])) ? "" : ' checked="checked"';
-
-    echo '<div class="form-group row"><div class="col-sm-2"><strong>'. _PUBLISHINHOME .'</strong></div>';
-
-    echo '<div class="col-sm-10"><label class="custom-control custom-radio">
-          <input class="custom-control-input" type="radio" name="ihome" value="0" '.$sel1.'/>
-          <span class="custom-control-indicator"></span>
-          <span class="custom-control-description">'. _YES .'</span>
-          </label>
-          <label class="custom-control custom-radio">
-          <input class="custom-control-input" type="radio" name="ihome" value="1" '.$sel2.'/>
-          <span class="custom-control-indicator"></span>
-          <span class="custom-control-description">'. _NO . '</span>
-          </label></div>';
-
-    echo '<i class="col-sm-10">'. _ONLYIFCATSELECTED .'</i>';
-
-    echo '</div>';      
-
-
+    echo "<b>" . _PUBLISHINHOME . "</b>&nbsp;&nbsp;";
+    echo "<input type=\"radio\" name=\"ihome\" value=\"0\" $sel1 />" . _YES . "&nbsp;"
+     . "<input type=\"radio\" name=\"ihome\" value=\"1\" $sel2 />" . _NO . '<br />'
+     . "&nbsp;&nbsp;&nbsp;<span class=\"note tiny\">(" . _ONLYIFCATSELECTED . ")</span><br /><br />";
 }
 
 /**
@@ -146,10 +131,10 @@ function vkpNewsSelectPoll($artid, $pollID)
         $options[$plID] = "<option value=\"$plID\">" . mxEntityQuotes($plTitle . $activ) . "</option>";
     }
 
-    echo "<div class=\"form-group\"><label for=\"pollID\" class=\"col-form-label\"><strong>" . _ATTACHAPOLL . "</strong></label>
-      <select class=\"form-control  col-md-2\" name=\"pollID\" id=\"pollID\">
+    echo "<br /><b>" . _ATTACHAPOLL . "</b><br />
+      <select name=\"pollID\">
       " . implode(PHP_EOL, $options) . "
-      </select></div>";
+      </select><br />";
 
     if ($artid && $pollTitle) {
         echo '- ' . sprintf(_ANNOUNCEEDIT, '<a href="' . adminUrl('Surveys', 'edit', array('pollID' => $pollID)) . '">' . $pollTitle . '</a>') . '<br />';
@@ -188,8 +173,8 @@ function SelectCategory($cat)
     global $prefix;
     $selcat = sql_query("select catid, title from ${prefix}_stories_cat order by title");
     $a = 1;
-    echo "<label for=\"category\">" . _CATEGORY . ":</label> ";
-    echo "<select class=\"form-control\" id=\"category\" name=\"catid\">";
+    echo "<b>" . _CATEGORY . ":</b><br /> ";
+    echo "<select name=\"catid\">";
     $sel = (empty($cat)) ? 'selected="selected" class="current"' : '';
     echo "<option value=\"0\" $sel> (" . _ARTICLES . ")</option>";
     while (list($catid, $title) = sql_fetch_row($selcat)) {
@@ -208,8 +193,8 @@ function DisplayStory($qid)
 {
     global $prefix, $user_prefix;
     $result = sql_query("SELECT qid, uid, uname as informant, subject as title, story as hometext, storyext as bodytext, topic, alanguage
-                        FROM ${prefix}_queue
-                        WHERE qid=" . intval($qid));
+    					FROM ${prefix}_queue
+    					WHERE qid=" . intval($qid));
     $story = sql_fetch_assoc($result);
     $story['op'] = PMX_MODULE . '/DisplayStory';
     include('header.php');
@@ -447,20 +432,24 @@ function myform($story, $preview = 0, $caption = '')
     global $prefix;
 
     $story = mxStoryDefaults($story);
-    echo '';
-    echo '<form name="snews" action="' . adminUrl(PMX_MODULE) . '" method="post">';
 
+    echo '<form name="snews" action="' . adminUrl(PMX_MODULE) . '" method="post">';
+    OpenTable();
+    if ($caption) {
+        echo '<center><font class="option"><b>' . $caption . '</b></font></center><br /><br />';
+    }
     if (isset($story['errmsg'])) {
-        echo '<div class="alert alert-danger"><h2>' . _ERROROCCURS . '</h2><ul><li>' . implode('</li><li>', $story['errmsg']) . '</li></ul></div>';
+        openTableAl();
+        echo '<div style="text-align: left;"><h2>' . _ERROROCCURS . '</h2><ul><li>' . implode('</li><li>', $story['errmsg']) . '</li></ul></div>';
+        closeTableAl();
+        echo '<br />';
     } else if ($preview) {
         OpenTable2();
-        echo '<div class="card"><div class="card-body">';
         vkpStoryPreview($story);
-        echo '</div></div>';
         CloseTable2();
-
+        echo '<br />';
     }
-    echo '<div class="card"><div class="card-header"><strong>' . $caption . '</strong></div><div class="card-body">';
+    echo '<div class="content">';
     vkpNewsSelectTopicCat($story);
     vkpPutInHome($story); //// Achtung!!! ihome: 0 = Ja , 1 = Nein
     addNewsTextFields($story);
@@ -473,7 +462,7 @@ function myform($story, $preview = 0, $caption = '')
     echo '<input type="hidden" name="qid" value="' . $story['qid'] . '" />';
     echo '<input type="hidden" name="aid" value="' . $story['aid'] . '" />';
     echo '<br /><br /><br />';
-    echo '<select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="op">';
+    echo '<select name="op">';
     if ($story['op'] == PMX_MODULE . '/DisplayStory' || $story['op'] == PMX_MODULE . '/PreviewAgain') {
         echo '<option value="' . PMX_MODULE . '/PreviewAgain">' . _PREVIEWSTORY . '</option>';
     }
@@ -487,17 +476,16 @@ function myform($story, $preview = 0, $caption = '')
         echo '<option value="' . PMX_MODULE . '/ChangeStory">' . _SAVECHANGES . '</option>';
     }
     echo '</select>';
-    echo '<button type="submit" class="btn btn-primary">' . _OK . '</button>';
+    echo '<input type="submit" value="' . _OK . '" />';
     if ($story['op'] == PMX_MODULE . '/DisplayStory' || $story['op'] == PMX_MODULE . '/PreviewAgain') {
-        echo '<a class="btn btn-danger" href="' . adminUrl(PMX_MODULE, 'DeleteStory', 'qid=' . $story['qid'] . '&amp;ok=0') . '"><i class="fa fa-trash"></i> ' . _DELETE . '</a>';
+        echo ' &nbsp;&nbsp; [&nbsp;<a href="' . adminUrl(PMX_MODULE, 'DeleteStory', 'qid=' . $story['qid'] . '&amp;ok=0') . '">' . _DELETE . '</a>&nbsp;]';
     } else if ($story['op'] == PMX_MODULE . '/EditStory') {
-        echo '<a class="btn btn-danger" href="' . adminUrl(PMX_MODULE, 'RemoveStory', 'sid=' . $story['sid'] . '&amp;ok=0') . '"><i class="fa fa-trash"></i> ' . _DELETE . '</a>';
+        echo ' &nbsp;&nbsp; [&nbsp;<a href="' . adminUrl(PMX_MODULE, 'RemoveStory', 'sid=' . $story['sid'] . '&amp;ok=0') . '">' . _DELETE . '</a>&nbsp;]';
     }
     echo '</div>';
-    //CloseTable();
+    CloseTable();
 
     echo '</form>';
-    echo '</div>';
 }
 
 /**
@@ -511,8 +499,8 @@ function submissions()
 
     include('header.php');
     $result = sql_query("SELECT qid, subject, timestamp, alanguage
-                        FROM ${prefix}_queue
-                        ORDER BY timestamp");
+    					FROM ${prefix}_queue
+    					ORDER BY timestamp");
     $dummy = 0;
     $out = "";
     while (list($qid, $title, $time, $alanguage) = sql_fetch_row($result)) {
@@ -537,10 +525,10 @@ function submissions()
     OpenTable2();
     if (empty($dummy)) {
         echo '
-            <div class="alert alert-info"><strong>' . _NOSUBMISSIONS . '</strong></div>';
+			<h3 class="align-center">' . _NOSUBMISSIONS . '</h3>';
     } else {
         echo "<center><b>" . _NEWSUBMISSIONS . "</b></center><br /><br />\n";
-        echo "<table class=\"table\">\n";
+        echo "<table class=\"list full\">\n";
         echo '<tr>';
         echo '<th>&nbsp;</th>';
         echo '<th>' . _DATE . '</th>';
@@ -564,9 +552,13 @@ function currentStories()
     extract(mxGetAdminData());
     include("header.php");
 
+    $img_delete = mxCreateImage("images/delete.gif", _DELETE, 0, 'title="' . _DELETE . '"');
+    $img_edit = mxCreateImage("images/edit.gif", _EDIT, 0, 'title="' . _EDIT . '"');
+    $img_view = mxCreateImage("images/view.gif", _SHOW, 0, 'title="' . _SHOW . '"');
+
     $result = sql_query("SELECT sid, aid as s_aid, title, time, topic, informant, alanguage, counter
-            FROM ${prefix}_stories WHERE  time  <= now()
-            ORDER BY time desc");
+    		FROM ${prefix}_stories WHERE  time  <= now()
+    		ORDER BY time desc");
     $dummy = 0;
     $out = '';
     $out2 = '';
@@ -580,11 +572,8 @@ function currentStories()
             $out .= "<td nowrap=\"nowrap\">" . formatTimestamp($time, _SHORTDATESTRING) . "</td>\n";
             $out .= "<td>" . $title . "</td>\n";
             $out .= "<td>" . mxGetLanguageString($alanguage) . "</td>\n";
-            $out .= "<td><span class=\"badge badge-secondary\"> ".$counter." </span></td>\n";
-            $out .= "<td nowrap=\"nowrap\">
-            <a class=\"btn btn-outline-secondary btn-sm\" href=\"" . adminUrl(PMX_MODULE, 'EditStory', "sid=" . $sid) . "\">
-            <i class=\"fa fa-edit fa-lg m-t-2\"></i></a> 
-            <a class=\"btn btn-outline-secondary btn-sm\" href=\"" . adminUrl(PMX_MODULE, 'RemoveStory', 'sid=' . $sid) . "\"><i class=\"fa fa-trash fa-lg m-t-2\"></i></a></td>\n";
+            $out .= "<td>" . $counter . "</td>\n";
+            $out .= "<td nowrap=\"nowrap\"><a href=\"" . adminUrl(PMX_MODULE, 'EditStory', "sid=" . $sid) . "\">" . $img_edit . "</a> <a href=\"" . adminUrl(PMX_MODULE, 'RemoveStory', 'sid=' . $sid) . "\">" . $img_delete . "</a></td>\n";
             $out .= "</tr>";
         } else {
             $out2 .= "<option value=\"" . $sid . "\">" . formatTimestamp($time, _SHORTDATESTRING) . " - " . htmlspecialchars(mxCutString($title, 75)) . "</option>\n";
@@ -599,10 +588,10 @@ function currentStories()
     vkpStoriesHeader(_ARTICLEADMIN);
     OpenTable();
     if (empty($dummy)) {
-        echo '<div class="alert alert-info">'. _ADMIN_NEWSNOARTICLES . '</b></font></center>';
+        echo "<center><font class=\"title\"><b>" . _ADMIN_NEWSNOARTICLES . "</b></font></center>\n";
     } else {
-        echo '<div class="card"><div class="card-header"><strong> '. _LAST .'   '. $countview .'   '. _ARTICLES .' </strong></div>';
-        echo '<div class="card-body"><table class="table">';
+        echo "<center><b>" . _LAST . " " . $countview . " " . _ARTICLES . "</b></center><br /><br />\n";
+        echo "<table class=\"full list\">\n";
         echo '<tr>';
         echo '<th>&nbsp;</th>';
         echo '<th>' . _DATE . '</th>';
@@ -612,12 +601,12 @@ function currentStories()
         echo '<th>' . _FUNCTIONS . '</th>';
         echo '</tr>';
         echo $out;
-        echo "</div></table></div>\n";
+        echo "</table>\n";
         if ($out2) {
             CloseTable();
             echo '<br />';
             OpenTable();
-            echo '<div class="text-center"><strong>'. _ADMIN_NEWSOLD . '</strong> (' . ($dummy - $countview) . ')</div>';
+            echo "<center><b>" . _ADMIN_NEWSOLD . "</b> (" . ($dummy - $countview) . ")</center><br />\n";
             echo "
 <form action=\"" . adminUrl(PMX_MODULE) . "\" method=\"get\">
 <select name=\"sid\" size=\"15\">" . $out2 . "</select><br /><br />
@@ -647,8 +636,8 @@ function timedStories()
     $img_view = mxCreateImage("images/view.gif", _SHOW, 0, 'title="' . _SHOW . '"');
 
     $result = sql_query("SELECT sid, aid as s_aid, title, time, topic, informant, alanguage
-                        FROM ${prefix}_stories WHERE  time  > now()
-                        ORDER BY time desc");
+    					FROM ${prefix}_stories WHERE  time  > now()
+    					ORDER BY time desc");
     $dummy = 0;
     $out = '';
     $out2 = '';
@@ -704,7 +693,7 @@ function timedStories()
 <option value=\"" . PMX_MODULE . "/EditStory\" selected=\"selected\">" . _EDIT . "</option>
 <option value=\"" . PMX_MODULE . "/RemoveStory\">" . _DELETE . "</option>
 </select>
-<input class=\"btn btn-primary\" type=\"submit\" value=\"" . _GO . "\" />
+<input type=\"submit\" value=\"" . _GO . "\" />
 </form>";
         }
     }
@@ -733,8 +722,8 @@ function vkpUsernameField ($story)
         $userinfo = mxGetUserDataFromUsername($story['informant']);
     }
     $informant_before = (isset($story['informant_before'])) ? $story['informant_before'] : $story['informant'];
-    echo '<div class="form-inline"><label for="informant"><strong>' . _SUBMITTER . ':</strong</label>
-    <input class="form-control" type="text" name="informant" id="informant" value="' . mxEntityQuotes($story['informant']) . '" />
+    echo '<br /><b>' . _SUBMITTER . ':</b><br />
+    <input type="text" name="informant" size="28" maxlength="25" value="' . mxEntityQuotes($story['informant']) . '" />
     <input type="hidden" name="informant_before" value="' . mxEntityQuotes($informant_before) . '" />
     ';
     if (!empty($userinfo['uid'])) {
@@ -742,7 +731,7 @@ function vkpUsernameField ($story)
         echo '&nbsp;&nbsp;<span class="content">
         [&nbsp;<a href="mailto:' . $userinfo['email'] . '">' . _SENDEMAILUSER . '</a>
         | <a href="modules.php?name=Private_Messages&amp;op=send&amp;uname=' . $story['informant'] . '" target="_blank">' . _SENDPMUSER . '</a>&nbsp;]
-        </span></div>';
+        </span>';
     }
 }
 
@@ -762,32 +751,24 @@ function CategoriesMenu()
         $fields[] = '<tr><td>
 <b>' . htmlspecialchars($title) . '</b></td><td>
 <form action="' . adminUrl(PMX_MODULE) . '" method="post">
-<div class="input-group">
+<input type="text" name="title" value="' . htmlspecialchars($title) . '" size="22" maxlength="40" />
 <input type="hidden" name="op" value="' . PMX_MODULE . '/SaveEditCategory" />
 <input type="hidden" name="catid" value="' . $catid . '" />
-<input class="form-control" type="text" name="title" value="' . htmlspecialchars($title) . '" size="22" maxlength="40" />
 <input type="hidden" name="anz" value="' . $anz . '" />
-<span class="input-group-btn">
-<button class="btn btn-primary" type="submit">' . _SAVECHANGES . '</button>
-</span>
-</div>
-</form>
-</td>
-<td><a class="btn btn-danger btn-sm" href="' . adminUrl(PMX_MODULE, 'DelCategory', 'catid=' . $catid . '&amp;anz=' . $anz . '&amp;tit=' . $tit) . '"><i class="fa fa-trash fa-lg m-t-2"</i></a></td>
-<td align="right">&nbsp;&nbsp;<div class="badge badge-success">' . $anz . '</div> ' . _ARTICLES . '</td>
+<input type="submit" value="' . _SAVECHANGES . '" />&nbsp;&nbsp;
+</form></td>
+<td><a href="' . adminUrl(PMX_MODULE, 'DelCategory', 'catid=' . $catid . '&amp;anz=' . $anz . '&amp;tit=' . $tit) . '">' . _DELETE . '</a></td>
+<td align="right">&nbsp;&nbsp;' . $anz . ' ' . _ARTICLES . '</td>
 </tr>';
     }
 
-    $fields[] = '
+    $fields[] = '<tr><td colspan="3"><br /></td></tr>
 <tr><td>
-</td><td>
+<b>' . _CATEGORYADD . '</b></td><td>
 <form action="' . adminUrl(PMX_MODULE) . '" method="post">
-<div class="form-group">
-<label for="title">' . _CATEGORYADD . '</label>
-<input class="form-control" type="text" name="title" value="" size="22" maxlength="40" />
+<input type="text" name="title" value="" size="22" maxlength="40" />
 <input type="hidden" name="op" value="' . PMX_MODULE . '/SaveCategory" />
-</div>
-<button class="btn btn-primary" type="submit"><i class="fa fa-plus"></i> ' . _SAVE . '</button>
+<input type="submit" value="' . _SAVE . '" />
 </form>
 </td><td colspan="2"><a name="AddCategory">&nbsp;</a>
 </td>
@@ -796,9 +777,9 @@ function CategoriesMenu()
     include('header.php');
     vkpStoriesHeader(_CATEGORIESADMIN);
     OpenTable();
-    echo '<div class="card"><div class="card-header"><strong>' . _CATEGORYADD . '</strong></div><div class="card-body"><table class="table">';
+    echo '<table>';
     echo implode("\n", $fields);
-    echo '</table></div></div>';
+    echo '</table>';
     CloseTable();
     include("footer.php");
 }
@@ -811,8 +792,8 @@ function SaveCategory($pvs)
     $pvs = mxAddSlashesForSQL($pvs);
     extract($pvs);
     $result = sql_query("SELECT catid
-                        FROM ${prefix}_stories_cat
-                        WHERE title='" . $title . "'");
+    					FROM ${prefix}_stories_cat
+    					WHERE title='" . $title . "'");
     list($check) = sql_fetch_row($result);
     if ($check) {
         $what1 = _CATEXISTS;
@@ -850,8 +831,8 @@ function SaveEditCategory($pvs)
     extract($pvs);
     $catid = (int)$catid;
     $result = sql_query("SELECT catid
-                        FROM ${prefix}_stories_cat
-                        WHERE title='$title'");
+    					FROM ${prefix}_stories_cat
+    					WHERE title='$title'");
     list($check) = sql_fetch_row($result);
     if ($check) {
         $what1 = _CATEXISTS;
@@ -914,8 +895,8 @@ function YesDelCategory()
     $result1 = sql_query("DELETE FROM ${prefix}_stories_cat where catid=" . intval($_GET['catid']));
     if ($result1) {
         $result2 = sql_query("SELECT sid
-                            FROM ${prefix}_stories
-                            WHERE catid=" . intval($_GET['catid']));
+        					FROM ${prefix}_stories
+        					WHERE catid=" . intval($_GET['catid']));
         while (list($sid) = sql_fetch_row($result2)) {
             $allsid[] = $sid;
         }
@@ -953,7 +934,7 @@ function NoMoveCategory($request)
         echo "<input type=\"hidden\" name=\"catid\" value=\"$catid\" />";
         echo "<input type=\"hidden\" name=\"op\" value=\"" . PMX_MODULE . "/NoMoveCategory\" />";
         echo "<input type=\"hidden\" name=\"tit\" value=\"$tit\" />";
-        echo "<input class=\"btn btn-primary\" type=\"submit\" value=\"" . _OK . "\" />";
+        echo "<input type=\"submit\" value=\"" . _OK . "\" />";
         echo "</form>";
     } else {
         $newcat = (int)$newcat;
@@ -975,8 +956,8 @@ function mxDelStories($arrsid = array())
     global $prefix, $user_prefix;
     $insids = implode(',', $arrsid);
     $result = sql_query("SELECT sid, catid, aid, informant
-                        FROM ${prefix}_stories
-                        WHERE sid IN (" . $insids . ")");
+    					FROM ${prefix}_stories
+    					WHERE sid IN (" . $insids . ")");
     if ($result) {
         $result22 = sql_query("DELETE FROM ${prefix}_stories WHERE sid IN (" . $insids . ")");
         if ($result22) {
@@ -1042,11 +1023,10 @@ function removeComment($tid, $sid, $ok = 0)
         title(_REMOVECOMMENTS);
         OpenTableAl();
         echo '
-            <div class="alert alert-danger">
-                <p><strong>' . _SURETODELCOMMENTS . '</strong></p>
-                <a class="btn btn-danger" href="modules.php?name=' . PMX_MODULE . '&amp;file=article&amp;sid=' . $sid . '" onclick="history.go(-1); return false;">' . _NO . '</a>
-                <a class="btn btn-success" href="' . adminUrl(PMX_MODULE, 'RemoveComment', 'tid=' . $tid . '&amp;sid=' . $sid . '&amp;ok=1') . '">' . _YES . '</a>
-            </div>';
+        	<p class="align-center">
+       			' . _SURETODELCOMMENTS . '<br /><br />
+       			[&nbsp;<a href="modules.php?name=' . PMX_MODULE . '&amp;file=article&amp;sid=' . $sid . '" onclick="history.go(-1); return false;">' . _NO . '</a> | <a href="' . adminUrl(PMX_MODULE, 'RemoveComment', 'tid=' . $tid . '&amp;sid=' . $sid . '&amp;ok=1') . '">' . _YES . '</a>&nbsp;]
+       		</p>';
         CloseTableAl();
         include('footer.php');
     }
