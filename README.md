@@ -1,30 +1,52 @@
-nanoMx
--------------------
-**UPDATE 17.11.2017**
+# nanoMx
+Free nanoMx CMS is light, ultra fast, very secure, modern, Community Content Management System.
 
-modules/News/admin/admin.php Refactorisation des catégories
-Mise à jour des la liste des articles
 
-**UPDATE 18.11.2017 (admin News)**
+## Lot of features
+    *Complet Website Navigation and Web Pages
+    *Nice & featured Users account
+	*User Groups, and Permissions
+    *Contents, documents or Articles for News or Blogging
+    *Categories
+    *Comments
+    *Extensions: Blocks & Modules
+    *Easy themes html/css
+	*SEO
+	*More & more....
+	
+nanoMx is designed to run on a machine with PHP 5.4.x min (PHP7 ready) and MySQL 5+
 
-Terminé(s) :
+## Powered by:
+*PHP
+*MYSQL 
+*Jquery
+*Purecss (yahoo framework css)
+*knacss (french)
+*Bootstrap 4 & coreUi admin template
+*hml5
+*css3
+	
+	
+## Installation	
+upload (FTP) all files & directory from .zip package to your webspace & run installer:
 
-Catégories
-Liste des 50 derniers articles
-Fichiers modifiés :
+http://YOURDOMAINENAME/setup/
 
-modules/News/admin/admin.php
-includes/mxNewsFunctions.php [addNewsTextFields() / vkpNewsSelectTopicCat() / vkpNewsSelectActComments() / vkpAutomatedSelect()]
+Available language:
 
-**UPDATE 19.11.2017** (admin News, Comments and Topics)
+	*French
+    *English
+    *German
+	*Turkish
+	
+	
+## License
+nanoMx CMS is open-sourced software licensed under the GNU/GPL license.
 
-Fichiers modifiés :
+## Support & development
+http://nanomx.pro/
 
-modules/News/admin/admin.php [removeComment()]
-admin/modules/comments/index.php
-modules/Topics/admin/admin.php
+## Donate
+Help us & make a donation to support the work of the Open Source Initiative.
 
-**UPDATE 22.11.2017**
-
-- Mise à jour Diabolo [)-(] (admin author, admin groups)
-- Mise à jour admin themes
+[DONATE](https://www.paypal.me/ThierryROUSSEL)

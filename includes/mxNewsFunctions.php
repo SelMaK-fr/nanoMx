@@ -295,6 +295,7 @@ function vkpStoryPreview($story)
     if (empty($story['topic'])) {
         $story['topic'] = vkpGetFirstTopic();
     }
+    /* change for nanomx
     if (function_exists('mx_theme_engineversion')) {
         @mxGetLangfile('News');
         if (MX_IS_USER) {
@@ -307,21 +308,22 @@ function vkpStoryPreview($story)
         @themearticle(null, null, null, null, null, null, null, null, null, $story);
     } else {
         /* fuer veraltete Themes (nuke etc.) */
-        echo vkpTopicImage($story['topic'], 1);
-        echo "<b>" . mxPrepareToDisplay($story['title']) . "</b><br /><br />";
+        //remove image topic echo vkpTopicImage($story['topic'], 1);
+        echo '
+            <div class="card m-2 p-2">
+                <h4>' . mxPrepareToDisplay($story['title']) . '</h4>';
         echo mxPrepareToDisplay($story['hometext']);
         if (isset($story['bodytext']) && trim(strip_tags($story['bodytext']))) {
             echo '<hr noshade="noshade" size="1" />' . mxPrepareToDisplay($story['bodytext']);
         }
         if (isset($story['notes']) && trim(strip_tags($story['notes']))) {
             echo '
-				<br />
-				<br />
-				<b>' . _NOTE . "</b> <i>" . mxPrepareToDisplay($story['notes']) . "</i>";
+                <p><strong>' . _NOTE . '</strong></p>
+                    ' . mxPrepareToDisplay($story['notes']);
         }
-    }
+    //}
     echo '
-		<br />';
+		  </div>';
 }
 
 /**
@@ -334,21 +336,46 @@ function addNewsTextFields($story)
 {
     // die Daten muessen ohne Backslashes kommen
     $sw = load_class('Textarea');
-    echo "<div>";
-    echo "<span class=\"content\"><b>" . _TITLE . "</b></span><br />";
-    echo "<input type=\"text\" name=\"title\" size=\"80\" maxlength=\"80\" value=\"" . mxEntityQuotes($story['title']) . "\" />";
-    echo "<br /><br /></div>";
-    echo '<div><b>' . _STORYTEXT . ':</b><br />';
-    echo $sw->getHtml(array('name' => 'hometext', 'value' => $story['hometext'], 'height' => '350'));
-    echo "<br /></div>";
-    echo "<div><b>" . _EXTENDEDTEXT . ':</b><br />';
-    echo $sw->getHtml(array('name' => 'bodytext', 'value' => $story['bodytext'], 'height' => '400'));
-    echo "<br /></div>";
+    echo '
+		<div class="row">
+            <div class="col-md-8">
+              <div class="form-group">
+                <label for="title">' . _TITLE . '</label>
+                <input type="text" class="form-control" id="title" name="title" size="80" maxlength="80" value="' . mxEntityQuotes($story['title']) . '" />
+              </div>
+            </div>
+          </div>';
+
+    echo '
+        <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="hometext">' . _STORYTEXT . '</label>
+                ' . $sw->getHtml(array('name' => 'hometext', 'value' => $story['hometext'], 'height' => '350')) . '
+              </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="bodytext">' . _EXTENDEDTEXT . '</label>
+                ' . $sw->getHtml(array('name' => 'bodytext', 'value' => $story['bodytext'], 'height' => '400')) . '
+              </div>
+            </div>
+        </div>';
     // Achtung: Notes funktionieren nur, wenn die Funktion über das Adminmodul aufgerufen wird
     if (MX_IS_ADMIN && defined("mxAdminFileLoaded")) {
-        echo "<div><b>" . _NOTES . ':</b><br />';
-        echo $sw->getHtml(array('name' => 'notes', 'value' => $story['notes'], 'height' => '120'));
-        echo "<br /></div>";
+        echo '
+        <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="notes">' . _NOTES . '</label>
+                    ' . $sw->getHtml(array('name' => 'notes', 'value' => $story['notes'], 'height' => '120')) . '
+              </div>
+            </div>
+        </div>';
     }
 }
 
@@ -362,10 +389,12 @@ function vkpNewsSelectLanguage($alanguage = '')
 {
     if ($GLOBALS['multilingual']) {
         echo '
-			<br />
-			<b>' . _LANGUAGE . ': </b>
-			<br />
-			' . mxLanguageSelect('alanguage', $alanguage, 'language', 1) . '<br />';
+            <div class="form-group row">
+                <label class="col-md-4 form-control-label" for="language">' . _LANGUAGE . '</label>
+            <div class="col-md-5">
+                ' . mxLanguageSelect('alanguage', $alanguage, 'language', 1) . '
+            </div>
+        </div>';
     } else {
         echo '
 			<input type="hidden" name="alanguage" value="" />';
@@ -382,9 +411,9 @@ function vkpSelectTopic($topic = 0)
 {
     global $prefix;
     echo '
-		<b>' . _TOPIC . ':</b>
-		<br />
-		<select name="topic">';
+        <label class="col-md-4 form-control-label" for="topic">' . _TOPIC . '</label>
+            <div class="col-md-5">
+		        <select id="topic" name="topic" class="form-control">';
     $toplist = sql_query("SELECT topicid, topictext 
 						FROM " . $prefix . "_topics 
 						ORDER BY topictext");
@@ -396,7 +425,8 @@ function vkpSelectTopic($topic = 0)
 			</option>';
     }
     echo '
-		</select>';
+		        </select>
+            </div>';
 }
 
 /**
@@ -482,13 +512,48 @@ function vkpAutomatedSelect($year, $day, $month, $hour, $min)
         $mi[] = "<option value=\"$xmin\" $sel>$ymin</option>";
         $xmin = $xmin + 5;
     }
-    echo "<br /><b>" . $title . "</b>&nbsp;&nbsp;";
-    echo "<br /><span class=\"tiny\">" . _NOWIS . ": " . vkpGetDate() . "</span><br /><br />";
-    echo " " . _DAY . ": <select name=\"day\">" . (implode("\n", $d)) . "</select>";
-    echo " " . _UMONTH . ": <select name=\"month\">" . (implode("\n", $m)) . "</select>";
-    echo " " . _YEAR . ": <input type=\"text\" name=\"year\" value=\"$year\" size=\"5\" maxlength=\"4\" />";
-    echo " " . _HOUR . ": <select name=\"hour\">" . (implode("\n", $h)) . "</select>";
-    echo " : <select name=\"min\">" . (implode("\n", $mi)) . "</select><br />";
+    echo '
+        <p class="h5">' . $title . '</p>
+        <p class="small">' . _NOWIS . ': ' . vkpGetDate() . '</p>
+<div class="row">
+
+            <div class="form-group col-sm-3">
+              <label for="day">' . _DAY . '</label>
+              <select class="form-control" name="day" id="day">
+                ' . (implode("\n", $d)) . '
+              </select>
+            </div>
+
+            <div class="form-group col-sm-3">
+              <label for="month">' . _UMONTH . '</label>
+              <select class="form-control" name="month" id="month">
+                ' . (implode("\n", $m)) . '
+              </select>
+            </div>
+
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label for="year">' . _YEAR . '</label>
+                <input class="form-control" type="text" name="year" id="year" value="' . $year . '" size="5" maxlength="4" />
+              </div>
+            </div>
+
+
+
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label>' . _HOUR . '</label>
+                <select class="form-control" name="hour">
+                    ' . (implode("\n", $h)) . '
+                </select>
+                <select class="form-control" name="min">
+                    ' . (implode("\n", $mi)) . '
+                </select>
+              </div>
+            </div>
+
+          </div>';
+
 }
 
 /**
@@ -500,19 +565,14 @@ function vkpAutomatedSelect($year, $day, $month, $hour, $min)
 function vkpNewsSelectTopicCat($story)
 {
     echo '
-		<table cellpadding="0" cellspacing="0" width="100%">
-			<tr valign="top">
-				<td width="30%">';
-					vkpSelectTopic($story['topic']);
-	echo '
-				</td>
-				<td>&nbsp;&nbsp;</td>
-				<td width="70%">';
-					SelectCategory($story['catid']);
-    echo '
-				</td>
-			</tr>
-		</table>';
+        <div class="form-group row">';
+            vkpSelectTopic($story['topic']);
+   echo '
+        </div>
+        <div class="form-group row">';
+            SelectCategory($story['catid']);
+    echo'          
+        </div>';
 }
 
 /**
@@ -526,12 +586,18 @@ function vkpNewsSelectActComments($acomm = 0)
     // Achtung!!! acomm: 0 = Ja , 1 = Nein
     $sel1 = (empty($acomm)) ? 'checked="checked"' : '';
     $sel2 = (empty($acomm)) ? '' : 'checked="checked"';
-    echo '
-		<br />
-		<b>' . _ACTIVATECOMMENTS . '</b>&nbsp;&nbsp;
-		<input type="radio" name="acomm" value="0" ' . $sel1 . ' />' . _YES . '
-		&nbsp;
-		<input type="radio" name="acomm" value="1" ' . $sel2 . ' />' . _NO ;
+    echo '            
+		<div class="form-group row">
+			<label class="col-md-4 col-form-label">' . _ACTIVATECOMMENTS . '</label>
+            <div class="col-md-8">
+                <label class="radio-inline">
+                    <input type="radio" name="acomm" value="0" ' . $sel1 . ' />' . _YES . '
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="acomm" value="1" ' . $sel2 . ' />' . _NO . '
+                </label>               
+            </div>
+        </div>';
 }
 
 /**

@@ -17,15 +17,18 @@
  * bugfixed by Joerg & Andi
  **/
 ?>
-<p><?php echo $this->intro ?></p>
+<div class="alert alert-info">
+  <?php echo $this->intro ?>
+</div>
 <?php echo $this->message ?>
-<form action="<?php echo adminUrl(PMX_MODULE) ?>" method="post">
- <div class="form-item">
-  <span style="font-weight:bold;"><?php echo _TITLE ?>:</span><span class="required" title="<?php echo _MX_MENU_INPUTREQUIRED_NOTE ?>"> *</span>
-  <br />
-  <input maxlength="60" name="add_menu_form[title]" size="60" value="<?php echo $this->title ?>" type="text" />
-  <p class="tiny"><?php echo _MX_MENU_ADDMENU_NAME_DESCR ?></p>
- </div>
- <input type="submit" name="add_menu_form[submit]" value="<?php echo _SAVE ?>" />
- <input type="hidden" name="add_menu_form[id]" value="<?php echo $this->id ?>" />
+
+<form action="<?php echo adminUrl(PMX_MODULE) ?>" method="post" class="form-inline">
+	<input type="hidden" name="add_menu_form[id]" value="<?php echo $this->id ?>" />
+	<div class="form-group">
+        <label><?php echo _TITLE ?></label>
+  </div>
+  <div class="form-group mx-sm-3">
+		  	<input class="form-control" maxlength="60" name="add_menu_form[title]" size="60" value="<?php echo $this->title ?>" placeholder="<?php echo _MX_MENU_ADDMENU_NAME_DESCR ?>" type="text" />
+	</div>
+        <button type="submit" class="btn btn-primary" name="add_menu_form[submit]"><i class="fa fa-plus fa-lg"></i>&nbsp;<?php echo _ADD ?></button>
 </form>
